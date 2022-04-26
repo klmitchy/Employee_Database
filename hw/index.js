@@ -133,4 +133,105 @@ menu = () => {
               name: "manager"
             }
           ])
-          
+          .then((answer) => {
+            let employeeInfo = [
+              answer.firstName,
+              answer.lastName,
+              answer.role,
+              answer.manager
+            ];
+            addEmployee(employeeInfo);
+          });
+      } else if (answers.menu == "Update Employee Role") {
+        updateEmployee();
+      } else if (answers.menu == "Delete an Employee") {
+        deleteEmp();
+      } else if (answers.menu == "Delete a Department") {
+        deleteDept();
+      } else if (answers.menu == "Delete a Role") {
+        deleteRole();
+      } else {
+        process.exit();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+// menu prompt questions for inquirer
+const menuQs = [
+  {
+    type: "list",
+    name: "menu",
+    message: "What would you like to do next?",
+    choices: [
+      "View All Departments",
+      "View All Roles",
+      "View All Employees",
+      "Add a Department",
+      "Add a Role",
+      "Add an Employee",
+      "Update Employee Role",
+      "Delete an Employee",
+      "Delete a Department",
+      "Delete a Role",
+      "Exit"
+    ]
+  }
+];
+
+// starts the program
+init();
+// call the db's function to return all employee related data
+async function viewEmployees() {
+  let employees = await db.findAllEmployees();
+  console.log("\n");
+  console.table(employees);
+  menu();
+}
+// call the db's function to return all department data
+async function viewDepartments() {
+  let departments = await db.findAllDepartments();
+  console.log("\n");
+  console.table(departments);
+  menu();
+}
+// call the db's function to return all role related data
+async function viewRoles() {
+  let roles = await db.findAllRoles();
+  console.log("\n");
+  console.table(roles);
+  menu();
+}
+// call the db's function to add new department, passing in the data from the user
+async function addDepartment(newDept) {
+  await db.addNewDepartment(newDept);
+}
+// call the db's function to add new role, passing in the data from the user
+async function addRole(newRole, salary, deptId) {
+  await db.addNewRole(newRole, salary, deptId);
+}
+// call the db's function to add new employee, passing in the data from the user
+async function addEmployee(employeeInfo) {
+  await db.addNewEmployee(employeeInfo);
+}
+// call the db's function to add update employee info
+async function updateEmployee() {
+  let employeeArr = await createEmployeeList();
+  // ask the user which employee to update from the list
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Which employee would you like to update?",
+        name: "employee",
+        choices: employeeArr
+      },
+      {
+        type: "input",
+        message: "What is their new role id?",
+        name: "role"
+      }
+    ])
+    //take the answer and split it into [first, last] so i can use the value to compare against db for update
+    
