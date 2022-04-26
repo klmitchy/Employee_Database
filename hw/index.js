@@ -234,4 +234,112 @@ async function updateEmployee() {
       }
     ])
     //take the answer and split it into [first, last] so i can use the value to compare against db for update
-    
+    .then((answer) => {
+      let empName = answer.employee.split(" ");
+      let first_name = empName[0];
+      let last_name = empName[1];
+      let updateInfo = [answer.role, first_name, last_name];
+      writeUpdate(updateInfo);
+    });
+}
+// call the db's function to write the updated info for the employee
+async function writeUpdate(updateInfo) {
+  await db.updateRole(updateInfo);
+}
+// call the db's function to delete the employee
+async function deleteEmp(name) {
+  let employeeArr = await createEmployeeList();
+  // ask the user which employee to update from the list
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Which employee would you like to delete?",
+        name: "employee",
+        choices: employeeArr
+      }
+    ])
+    //take the answer and split it into [first, last] so i can use the value to compare against db for update
+    .then((answer) => {
+      let empName = answer.employee.split(" ");
+      let first_name = empName[0];
+      let last_name = empName[1];
+      let deletedEmp = [first_name, last_name];
+      db.deleteEmployee(deletedEmp);
+    });
+}
+
+// call the db's function to delete the dept
+async function deleteDept() {
+  let departments = await createDeptList();
+  // ask the user which dept to delete from the list
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Which department would you like to delete?",
+        name: "dept",
+        choices: departments
+      }
+    ])
+    //take the answer and split it into [first, last] so i can use the value to compare against db for update
+    .then((answer) => {
+      db.deleteDepartment(answer.dept);
+    });
+}
+// call the db's function to delete the role
+async function deleteRole() {
+  let roles = await createRoleList();
+  // ask the user which dept to delete from the list
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Which role would you like to delete?",
+        name: "role",
+        choices: roles
+      }
+    ])
+    //take the answer and split it into [first, last] so i can use the value to compare against db for update
+    .then((answer) => {
+      db.deleteRoleDb(answer.role);
+    });
+}
+
+async function createEmployeeList() {
+  // create an array of all employees to create an options list for inquirer
+  let employeeArr = [];
+  // call the db function to get the employee names and concat {first last, first last, etc}
+  let employees = await db.employeeNames();
+  // converting object to array by looping over the object and pushing each name to the array,
+  Object.keys(employees).forEach(function (key) {
+    let row = employees[key];
+    employeeArr.push(row.employee_name);
+  });
+  return employeeArr;
+}
+
+async function createDeptList() {
+  // create an array of all employees to create an options list for inquirer
+  let deptArr = [];
+  // call the db function to get the employee names and concat {first last, first last, etc}
+  let depts = await db.departmentNames();
+  // converting object to array by looping over the object and pushing each name to the array,
+  Object.keys(depts).forEach(function (key) {
+    let row = depts[key];
+    deptArr.push(row.departments);
+  });
+  return deptArr;
+}
+async function createRoleList() {
+  // create an array of all employees to create an options list for inquirer
+  let roleArr = [];
+  // call the db function to get the employee names and concat {first last, first last, etc}
+  let roles = await db.roleNames();
+  // converting object to array by looping over the object and pushing each name to the array,
+  Object.keys(roles).forEach(function (key) {
+    let row = roles[key];
+    roleArr.push(row.roles);
+  });
+  return roleArr;
+}
