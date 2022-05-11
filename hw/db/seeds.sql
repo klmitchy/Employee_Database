@@ -1,24 +1,10 @@
-INSERT INTO department(dept_name) VALUES ('Sales');
-
-
-INSERT INTO emp_role(title, salary, dept_id)
- VALUES ('Sales Associate', '50000', 1);
- ////
-
-INSERT INTO department(dept_name) VALUES ('Sales');
-
-
-INSERT INTO emp_role(title, salary, dept_id)
- VALUES ('Sales Associate', '50000', 1);
-
- //
- INSERT INTO department (name)
+INSERT INTO department(dept_name) 
 VALUES ("Engineering"),
        ("Sales"),
        ("Finance"),
        ("Customer Service");
 
-INSERT INTO role (title, salary, department_id)
+INSERT INTO emp_role (title, salary, dept_id)
 VALUES ("Software Developer", 80000, 1001),
        ("Salesperson", 60000, 1002),
        ("Accountant", 75000, 1003),
