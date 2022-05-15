@@ -50,7 +50,7 @@
 
 // //
 const inquirer = require("inquirer");
-const db = require("./db/dbQueries");
+//const db = require("./db/dbQueries");
 
 const init = () => {
   console.log("Welcome to the Employee Tracker!");
@@ -191,9 +191,9 @@ async function viewEmployees() {
 }
 // call the db's function to return all department data
 async function viewDepartments() {
-  let departments = await db.findAllDepartments();
+  let department = await db.findAllDepartments();
   console.log("\n");
-  console.table(departments);
+  console.table(department);
   menu();
 }
 // call the db's function to return all role related data
